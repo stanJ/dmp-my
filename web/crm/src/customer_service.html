@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>customer service</title>
+		<!-- 引入样式 -->
+		<link rel="stylesheet" type="text/css" href="lib/element/theme-default/index.css"/>
+		<link rel="stylesheet/less" type="text/css" href="css/frame.less?v=2e1bc33d12"/>
+		<link rel="stylesheet/less" type="text/css" href="css/public.less?v=a99bafa08b"/>
+		<link rel="stylesheet/less" type="text/css" href="css/campaign/customer_service.less"/>
+		<script src="lib/less/less-1.7.0.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="app" id="app">
+			<prs-header></prs-header>
+			<div class="content">
+				<nav-product 
+					:options="pages.urls" 
+					v-model="pages.curPage"
+					:path="pages.path"
+				>
+				</nav-product>
+				<div class="box clearfix">
+					<div class="chat-wrapper">
+						<div class="chat-header">
+							<div class="chat-header__btns fl">
+								<div class="chat-header__prompt chat-header__btn fl" 
+									:class="{'is-active': isChat}"
+									@click="handlePrompt">
+									<div class="chat-icon icon--message"></div>
+									<div class="chat-header__text" v-cloak>{{unreadNums}} Cust Waiting</div>
+								</div>
+								<div class="chat-header__history chat-header__btn fl"
+									:class="{'is-active': !isChat}"
+									@click="handleHistory">
+									<div class="chat-icon icon--history"></div>
+									<div class="chat-header__text">
+										Chat History
+									</div>
+								</div>
+							</div>
+							<div class="chat-header__customer fr">WeTarget</div>
+						</div>
+						<div class="chat-body">
+							<div class="chat-body__left fl">
+								<div class="current-customers-list" v-show="isChat">
+									<div class="chat-customer" 
+										:class="{'is-active': activeCustomer == customer.openid}" 
+										v-for="customer in customers" 
+										@click="handleActive(customer.openid)">
+										<div class="chat-customer__head" 
+											:class="{'unread': customer.isUnread}">
+											<img class="chat-customer__head-img" :src="customer.headimgurl"/>
+										</div>
+										<div class="chat-customer__name" v-text="customer.nickname"></div>
+									</div>
+								</div>
+								<div class="history-customers-list" v-show="!isChat">
+									<div class="chat-customer" 
+										:class="{'is-active': activeHistoryCustomer == historyCustomer.openid}" 
+										v-for="historyCustomer in historyCustomers" 
+										@click="handleHistoryActive(historyCustomer.openid)">
+										<div class="chat-customer__head">
+											<img class="chat-customer__head-img" :src="historyCustomer.headimgurl"/>
+										</div>
+										<div class="chat-customer__name" v-text="historyCustomer.nickname"></div>
+									</div>
+								</div>
+							</div>
+							<div class="chat-body__middle fl">
+								<div class="chat-body__chat-box"
+									v-show="isChat">
+									<chat-session 
+										:chat-records="sessions[activeCustomer]['chatRecords']"
+										:offer-list="offerList"
+										ref="chatSession"></chat-session>
+									<hr class="chat-body__line" />
+									<div class="chat-body__send-box">
+										<div class="send-box__btns">
+											<label for="upload-img">
+												<div class="chat-icon icon--document"></div>
+											</label>
+											<input type="file" name="file" id="upload-img" class="upload-input"
+												@change="handleUpload($event)"/>
+										</div>
+										<div class="send-box__textarea">
+											<el-input type="textarea" :rows="3" 
+												v-model="sessions[activeCustomer]['curInput']"
+												@keyup.enter.ctrl.native="handleSendMessage"
+												@dragover.native="allowDrop($event)"
+												@drop.native="drop($event)"></el-input>
+										</div>
+										<div class="send-box__send-btn-wrapper">
+											<div class="send-box__send-btn-container clearfix">
+												<div class="send-box__send-text fl">按下Ctrl+Enter发送</div>
+												<div class="send-box__send-btn fl">
+													<el-button class="btn--send" @click="handleSendMessage">发送</el-button>
+												</div>
+											</div>
+											
+										</div>
+										<div class="send-box__shadow" v-show="!activeCustomer"></div>
+									</div>
+								</div>
+								<!--聊天记录-->
+								<div class="chat-body__chat-box chat-box--history"
+									v-show="!isChat">
+									<chat-session 
+										class="chat-session--history"
+										:chat-records="historyMessages"
+										:offer-list="offerList"
+										ref="historySession"></chat-session>		
+								</div>
+							</div>
+							<div class="chat-body__right fl">
+								<customer-service-right 
+									:offer-list="offerList"
+									ref="right"
+									:customerid="activeCustomer"></customer-service-right>
+							</div>
+							
+							
+							<!--test-->
+							
+							
+							
+							
+						</div>
+					</div>
+					
+				</div>
+			</div>
+			
+		</div>
+		<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=26db9e0b4807be9a9d9e81d2d8f2075d"></script>
+		<script src="lib/seajs/sea.js" type="text/javascript" charset="utf-8" id="seajsnode"></script>
+		<script src="lib/moment/moment.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/jquery/jquery-3.2.1.js"></script>
+		<script src="lib/undersore/underscore-min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/util.js?v=7ebe57a410" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/vue/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/element/index.js"></script>
+		<script src="lib/element/umd/locale/en.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/local.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/frame.js?v=d3677ee7a5" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/socket/socket.io.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/campaign/customer_service.js" type="text/javascript" charset="utf-8"></script>
+	</body>
+</html>

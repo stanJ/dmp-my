@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>prs</title>
+		<!-- 引入样式 -->
+		<link rel="stylesheet" type="text/css" href="lib/element/theme-default/index.css"/>
+		<link rel="stylesheet/less" type="text/css" href="css/frame.less?v=81756939b31"/>
+		<link rel="stylesheet/less" type="text/css" href="css/public.less?v=551b270b811"/>
+		<link rel="stylesheet/less" type="text/css" href="css/channel_draw.less?v=f7b9aabbc0?v=1"/>
+		<script src="lib/less/less-1.7.0.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="app" id="app">
+			<prs-header></prs-header>
+			<!--<prs-left-menu></prs-left-menu>-->
+			<div class="content">
+				<nav-product 
+					:options="productsCategory.allProducts" 
+					v-model="productsCategory.selectedOptions"
+					@inject="insertData">
+				</nav-product>
+				<div class="block clearfix">
+					<el-date-picker
+				      v-model="dateRange"
+				      type="daterange"
+				      placeholder="选择日期范围" 
+				      class="fl blue-bg mr10">
+				    </el-date-picker>
+				    <el-select placeholder="筛选" v-model="queryProject" class="fl blue-bg" style="margin-right: 10px;"></el-select>
+					<div class="triangle--lg fl"></div>
+					<div class="block__text">
+						<span class="bt--lg">筛选条件</span>
+						<span class="bt">版本:<span class="bt__info">1.2</span></span>
+						<span class="bt">人群:<span class="bt__info">青年人群</span></span>
+					</div>
+				</div>
+				<div class="block clearfix">
+					<div class="clearfix" style="margin-bottom: 22px;">
+						<div class="bwl--b clearfix">
+							<div class="section clearfix">
+								<span class="title-prefix-md">渠道基础数据</span>
+								<div class="fr clearfix font-zero">
+									<input type="text" name="" class="input--lg mr10"/>
+									<button class="button--md">渠道管理</button>
+								</div>
+							</div>
+							<component :is='channelBaseLeftView' :sku-id='productId'></component>
+						</div>
+						<div class="bwr--b clearfix">
+							<div class="channel-query">
+								<span class="channel-query__text">渠道健康</span>
+								<el-select placeholder="筛选" class="blue-bg" 
+									v-model="channelHealthQuery.query"
+									style="margin-right: 0;"></el-select>
+							</div>
+							<component :is='channelBaseRightView' :sku-id='productId'></component>
+						</div>
+					</div>
+	
+					<hr class="line"/>
+					<div class="clearfix" style="margin-top: 21px;">
+						<component :is='channelBaseChartView' :sku-id='productId'></component>
+					</div>
+					
+					
+				</div>
+				<div class="bwl--a">
+					<div class="block clearfix">
+						<div class="section clearfix">
+							<span class="title-prefix-md">渠道关注度分析</span>
+						</div>
+						<component :is='channelFocusView' :sku-id='productId'></component>
+					</div>
+					<div class="block clearfix">
+						<div class="section clearfix">
+							<span class="title-prefix-md">渠道成熟度分析</span>
+						</div>
+						<component :is='channelMatureView' :sku-id='productId'></component>
+					</div>
+				</div>
+				<div class="bwr--a">
+					<div class="block clearfix">
+						<div class="section clearfix">
+							<span class="title-prefix-md">渠道用户停留时间</span>
+						</div>
+						<div class="bar-staytime-wrapper">
+							<component :is='channelStayTimeView' :sku-id='productId'></component>
+						</div>
+						
+					</div>
+				</div>
+				
+				
+			</div>
+			
+		</div>
+		<script src="lib/seajs/sea.js" type="text/javascript" charset="utf-8" id="seajsnode"></script>
+		<script src="lib/moment/moment.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/jquery/jquery-3.2.1.js"></script>
+		<script src="lib/undersore/underscore-min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/util.js?v=9b0fe388f8" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/vue/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/element/index.js"></script>
+		<script src="lib/echarts/echarts.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/frame.js?v=1a186af193" type="text/javascript" charset="utf-8"></script>
+		<script src="js/channel_draw.js?v=0d15939e19" type="text/javascript" charset="utf-8"></script>
+	</body>
+</html>

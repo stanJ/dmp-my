@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>prs</title>
+		<!-- 引入样式 -->
+		<link rel="stylesheet" type="text/css" href="lib/element/theme-default/index.css"/>
+		<link rel="stylesheet/less" type="text/css" href="lib/jqcloud/jqcloud.less"/>
+		<link rel="stylesheet/less" type="text/css" href="css/frame.less?v=81756939b3"/>
+		<link rel="stylesheet/less" type="text/css" href="css/public.less?v=551b270b81"/>
+		<link rel="stylesheet/less" type="text/css" href="css/user_analysis.less?v=84c756990e"/>
+		<script src="lib/less/less-1.7.0.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="app" id="app">
+			<prs-header></prs-header>
+			<!--<prs-left-menu></prs-left-menu>-->
+			<div class="content">
+				<nav-product 
+					:options="productsCategory.allProducts" 
+					v-model="productsCategory.selectedOptions" 
+					@inject="insertData">
+				</nav-product>
+				<div class="tabs__nav">
+					<div class="nav--tab">
+						<!--<a href="#/" class="tab-title" data-name="tab1" 
+							data-func="loadTab1" data-page="user">用户标签维护</a>-->
+						<a href="#/" class="tab-title " data-name="tab2"
+							data-func="loadTab2" data-page="user">消费人群属性分析</a>
+						<!--<a href="#/consumerAttrAnalysis" class="tab-title " data-name="tab2"
+							data-func="loadTab2" data-page="user">消费人群属性分析</a>-->
+						<a href="#/userBuyTransferAnalysis" class="tab-title " data-name="tab3"
+							data-func="loadTab3" data-page="user">用户购买转换分析</a>
+						<a href="#/userBuyAttrAnalysis" class="tab-title " data-name="tab4"
+							data-func="loadTab4" data-page="user">用户购买特征分析</a>
+						<a href="#/userNetBehaviorAnalysis" class="tab-title " data-name="tab5"
+							data-func="loadTab5" data-page="user">用户网络行为分析</a>
+					</div>
+					<div class="nav__title clearfix">
+						<span class="title-prefix-md"></span>
+						<div class="query-control">
+							<el-select placeholder="人群筛选" style="margin-right: 6px;"
+								v-model="people">
+								<el-option value="1">学生</el-option>
+								<el-option value="2">白领</el-option>
+							</el-select>
+							<button class="button--lg">开始分析</button>
+						</div>
+					</div>
+				</div>
+				<div class="tabs__content clearfix">
+					<!--<div id="userLabelMaintain" class="tab-pane" data-name="tab1"></div>-->	
+					<div id="consumerAttrAnalysis" class="tab-pane" data-name="tab2">
+						<div class="clearfix">
+							<div class="bwl--half">
+								<div class="block clearfix" style="height: 346px;">
+									<div class="section clearfix">
+										<span class="title-prefix-md">年龄分布</span>
+									</div>
+									<component :is='userAgeChartView' :sku-id='productId'
+										:need-load.sync="tab2NeedLoad"></component>
+								</div>
+							
+							</div>
+							<div class="bwr--half" >
+								<div class="block clearfix" style="height: 346px;">
+									<div class="section clearfix">
+										<span class="title-prefix-md">学历分布</span>
+									</div>
+									<component :is='userEducationChartView' :sku-id='productId'></component>
+								</div>
+							</div>
+						</div>
+	
+						<div class="clearfix">
+							<div class="bwl--half">
+								<div class="block clearfix" style="height: 346px;">
+									<div class="section clearfix">
+										<span class="title-prefix-md">收入分布</span>
+										<div class="brand-title fr">Income data</div>
+									</div>
+									<component :is='userIncomeChartView' :sku-id='productId'></component>
+								</div>
+							</div>
+							<div class="bwr--half" >
+								<div class="block clearfix" style="height: 346px;">
+									<div class="section clearfix">
+										<span class="title-prefix-md">职业分布</span>
+										<div class="brand-title fr">Top10职业分布</div>
+									</div>
+									<component :is='userJobsChartView' :sku-id='productId'></component>
+								</div>
+							</div>
+						</div>
+						<div class="clearfix">
+							<div class="bwl--half">
+								<div class="block clearfix" style="height: 346px;">
+									<div class="section clearfix">
+										<span class="title-prefix-md">性别分布</span>
+									</div>
+									<component :is='userSexChartView' :sku-id='productId'></component>
+								</div>
+							</div>
+							<div class="bwr--half" >
+								<div class="block clearfix" style="height: 346px;">
+									<div class="section clearfix">
+										<span class="title-prefix-md">地域分布</span>
+									</div>
+									<component :is='userPlaceChartView' :sku-id='productId'></component>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="userBuyTransferAnalysis" class="tab-pane" data-name="tab3">
+						<div class="block clearfix" style="height: 440px;">
+							<div class="bwl--f">
+								<div class="section clearfix" style="margin-bottom: 38px;">
+									<span class="title-prefix-md">购买浏览人数分析</span>
+								</div>
+								<component :is='buyerAmountTableView' :sku-id='productId'
+									:need-load.sync="tab3NeedLoad"></component>
+							</div>
+							<div class="bwr--f">
+								<component :is='buyerAmountChartView' :sku-id='productId'></component>
+							</div>
+							
+						</div>
+						
+						<div class="block clearfix" style="height: 636px;">
+							<div class="section clearfix" style="margin-bottom: 10px;">
+								<span class="title-prefix-md">购买金额分布 —— 地域维度</span>
+							</div>
+							<hr class="line" />
+							<div class="clearfix row">
+								<div class="row__left fl">
+									<span>地域分布</span>
+									<span class="export blue-text">导出</span>
+								</div>
+								<div class="row__right fr">
+									<span class="blue-text" style="margin-right: 6px;">时间筛选</span>
+									<el-select placeholder="自然月" class="blue-bg" v-model="timeQuery.month"></el-select>
+									<el-select placeholder="日期" class="blue-bg" v-model="timeQuery.date"></el-select>
+								</div>
+							</div>
+							<hr class="line" />
+							<div class="clearfix" style="padding-top: 16px">
+								<div class="bwl--d">
+									<component :is='expensePlaceTableView' :sku-id='productId'></component>
+								</div>
+								<div class="bwr--d">
+									<component :is='expensePlaceChartView' :sku-id='productId'></component>
+								</div>
+							</div>
+						</div>
+						<div class="block clearfix" style="height: 523px;">
+							<div class="section clearfix" style="margin-bottom: 39px;">
+								<span class="title-prefix-md">购买次数分布 —— 时间维度</span>
+							</div>
+							<div class="bwl--b">
+								<component :is='buyTimesTableView' :sku-id='productId'></component>
+							</div>
+							<div class="bwr--b">
+								<component :is='buyTimesChartView' :sku-id='productId'></component>
+							</div>
+							
+						</div>
+						<div class="block clearfix" style="height: 526px;">
+							<div class="section clearfix" style="margin-bottom: 10px;">
+								<span class="title-prefix-md">客单价分析</span>
+								<div class="search-wrapper fr mr10">
+									<input type="text" placeholder="Search" class="input--lg input--search"> 
+									<div class="icon-search"></div>
+								</div>
+							</div>
+							<hr class="line" />
+							<component :is='pricesTableView' :sku-id='productId'></component>
+						</div>
+						<div class="block clearfix" style="height: 526px;">
+							<div class="section clearfix" style="margin-bottom: 10px;">
+								<span class="title-prefix-md">经营概况</span>
+								<button class="button--lg fr">自助取数</button>
+							</div>
+							<hr class="line" />
+							<component :is='businessOverviewTabsView' :sku-id='productId'></component>
+							
+						</div>
+						
+					</div>
+					
+					<div id="userBuyAttrAnalysis" class="tab-pane" data-name="tab4">
+						<div class="clearfix">
+							<div class="bwl--half">
+								<div class="block clearfix" style="height: 346px;">
+									<div class="section clearfix" style="margin-bottom: 10px;">
+										<span class="title-prefix-md">O2O导入分析</span>
+									</div>
+									<component :is='o2oChartView' :sku-id='productId'
+										:need-load.sync="tab4NeedLoad"></component>
+								</div>
+							
+							</div>
+							<div class="bwr--half" >
+								<div class="block clearfix" style="height: 346px;">
+									<div class="section clearfix">
+										<span class="title-prefix-md">性格偏好分析</span>
+									</div>
+									<component :is='preferCardsView' :sku-id='productId'></component>
+								</div>
+							
+							</div>
+						</div>
+	
+						<div class="clearfix">
+							<div class="bwl--half">
+								<div class="block clearfix" style="height: 346px;">
+									<div class="section clearfix">
+										<span class="title-prefix-md">价格区间分析</span>
+										<div class="brand-title fr">用户关注价格区间</div>
+									</div>
+									<component :is='priceAnalysisChartView' :sku-id='productId'></component>
+								</div>
+							
+							</div>
+							<div class="bwr--half" >
+								<div class="block clearfix" style="height: 346px;">
+									<div class="section clearfix">
+										<span class="title-prefix-md">品牌偏好分析</span>
+										<div class="brand-title fr">偏好度Top10奶粉品牌</div>
+									</div>
+									<component :is='brandPreferChartView' :sku-id='productId'></component>
+								</div>
+							
+							</div>
+						</div>
+						<div class="block clearfix" style="height: 430px;">
+							<div class="bwl--e">
+								<div class="section clearfix" style="margin-bottom: 10px;">
+									<span class="title-prefix-md">年龄差异分析</span>
+								</div>
+								<component :is='ageDiffChartView' :sku-id='productId'></component>
+							</div>
+							<div class="bwr--e">
+								<div class="title--reason">不同人群购买奶粉驱动因素</div>
+								<component :is='reasonCardsView' :sku-id='productId'></component>
+							</div>
+							
+						</div>
+						
+					</div>
+					
+						
+					<div id="userNetBehaviorAnalysis" class="tab-pane" data-name="tab5">
+						<div class="clearfix">
+							<div class="bwl--half">
+								<div class="block clearfix" style="height: 400px;">
+									<div class="section clearfix">
+										<span class="title-prefix-md">浏览时长</span>
+									</div>
+									<component :is='visitTimeChartView' :sku-id='productId'
+										:need-load.sync="tab5NeedLoad"></component>
+								</div>
+							
+							</div>
+							<div class="bwr--half" >
+								<div class="block clearfix" style="height: 400px;">
+									<div class="section clearfix">
+										<span class="title-prefix-md">页面浏览量</span>
+									</div>
+									<component :is='visitAmountChartView' :sku-id='productId'></component>
+								</div>
+							
+							</div>
+						</div>
+						
+						<div class="block clearfix">
+							<div class="section clearfix" style="margin-bottom: 10px;">
+								<span class="title-prefix-md">页面停留时间</span>
+								<div class="search-wrapper fr mr10">
+									<input type="text" class="input--lg input--search" placeholder="Search"/>
+									<div class="icon-search"></div>
+								</div>
+							</div>
+							<hr class="line"/>
+							<component :is='pageStayTableView' :sku-id='productId'></component>
+						</div>
+						<div class="clearfix">
+							<div class="bwl--half">
+								<div class="block clearfix" style="height: 430px;">
+									<div class="section clearfix">
+										<span class="title-prefix-md">进入页面分析</span>
+									</div>
+									<component :is='pageAnalysisTableView' :sku-id='productId'></component>
+								</div>
+							
+							</div>
+							<div class="bwr--half" >
+								<div class="block clearfix" style="height: 430px;">
+									<div class="section clearfix">
+										<span class="title-prefix-md">浏览路径分析</span>
+									</div>
+									<div class="visit-path"></div>
+								</div>
+							
+							</div>
+						</div>
+					</div>
+					
+						
+				</div>
+			</div>
+		
+		</div>
+		<script src="lib/seajs/sea.js" type="text/javascript" charset="utf-8" id="seajsnode"></script>
+		<script src="lib/moment/moment.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/jquery/jquery-3.2.1.js"></script>
+		<script src="lib/undersore/underscore-min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/util.js?v=9b0fe388f8" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/jqcloud/jqcloud-1.0.4.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/vue/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/element/index.js"></script>
+		<script src="lib/echarts/echarts.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/echarts/china.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/frame.js?v=1a186af193" type="text/javascript" charset="utf-8"></script>
+		<script src="js/user_analysis.js?v=f4b4fc927b" type="text/javascript" charset="utf-8"></script>
+		
+	</body>
+</html>

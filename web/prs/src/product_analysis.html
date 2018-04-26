@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>prs</title>
+		<!-- 引入样式 -->
+		<link rel="stylesheet" type="text/css" href="lib/element/theme-default/index.css"/>
+		<link rel="stylesheet/less" type="text/css" href="lib/jqcloud/jqcloud.less"/>
+		<link rel="stylesheet/less" type="text/css" href="css/frame.less?v=81756939b3"/>
+		<link rel="stylesheet/less" type="text/css" href="css/public.less?v=551b270b81"/>
+		<link rel="stylesheet/less" type="text/css" href="css/product_analysis.less?v=6cebfe241f"/>
+		<script src="lib/less/less-1.7.0.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="app" id="app">
+			<prs-header></prs-header>
+			<!--<prs-left-menu></prs-left-menu>-->
+			<div class="content">
+				<nav-product 
+					:options="productsCategory.allProducts" 
+					v-model="productsCategory.selectedOptions"
+					@inject="insertData">
+				</nav-product>
+				<div class="tabs__nav">
+					<a href="#/" class="tab-title" data-name="tab1" style="margin-left: 40px;"
+						data-func="loadTab1" data-page="product">标注总览</a>
+					<a href="#/attrAnalysis" class="tab-title " data-name="tab2" 
+						data-func="loadTab2" data-page="product">属性分析</a>
+					<a href="#/saleAnalysis" class="tab-title " data-name="tab3"
+						data-func="loadTab3" data-page="product">销售分析</a>
+					<a href="#/commentAnalysis" class="tab-title " data-name="tab4" 
+						data-func="loadTab4" data-page="product">点评分析</a>
+					<a href="#/competeAnalysis" class="tab-title " data-name="tab5">竞品分析</a>
+					<!--<a href="#/productAnalysis" class="tab-title" data-name="tab6">产品分类</a>-->
+				</div>
+				<div class="tabs__content clearfix">
+					<div id="labelOverview" class="tab-pane" data-name="tab1">
+						<div class="block clearfix" style="height: 360px;">
+							<div class="section clearfix" style="margin-bottom: 0;">
+								<span class="title-prefix-md">标注总览</span>
+							</div>
+							<div class="bwl--e" style="height: 300px;">
+								<component :is="productOverviewView" :sku-id="productId" :need-load.sync="tab1NeedLoad"></component>
+								
+							</div>
+							<div class="bwr--e" style="height: 300px;">
+								<div class="bwl--f">
+									<component :is="attrLabelChartView" :sku-id="productId"></component>
+									
+								</div>
+								<div class="bwr--f">
+									<component :is="emotionLabelChartView" :sku-id="productId"></component>
+								</div>
+							</div>
+						</div>
+						<div class="clearfix">
+							<div class="bwl--half">
+								<div class="block clearfix" style="height: 346px;">
+									<div class="section clearfix">
+										<span class="title-prefix-md">商品评论热点</span>
+									</div>
+									<component :is="goodsCommentCloudView" :sku-id="productId"></component>
+								</div>
+								<div class="block clearfix" style="height: 346px;">
+									<div class="section clearfix" style="margin-bottom: 10px;">
+										<span class="title-prefix-md">销售热点</span>
+									</div>
+									<component :is="hotSalesSpotChartView" :sku-id="productId"></component>
+								</div>
+							</div>
+							<div class="bwr--half">
+								<div class="block clearfix" style="height: 346px;">
+									<div class="section clearfix" style="margin-bottom: 10px;">
+										<span class="title-prefix-md">好评率</span>
+									</div>
+									<component :is="goodReputationChartView" :sku-id="productId"></component>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div id="attrAnalysis" class="tab-pane" data-name="tab2">
+						<div class="bwl--half">
+							<div class="block clearfix" style="height: 346px;">
+								<div class="section clearfix">
+									<span class="title-prefix-md">产品基本属性</span>
+								</div>
+								<component :is="productAttrsView" :sku-id="productId" 
+									:products-category="productsCategory"
+									:need-load.sync="tab2NeedLoad"></component>
+							</div>		
+							<div class="block clearfix" style="height: 346px;">
+								<div class="section clearfix">
+									<span class="title-prefix-md">热点关键字</span>
+								</div>
+								<component :is="hotKeyCloudView" :sku-id="productId"></component>
+							</div>
+							
+						</div>
+						<div class="bwr--half">
+							<div class="block clearfix" style="height: 346px;">
+								<div class="section clearfix">
+									<span class="title-prefix-md">基础标签分析</span>
+								</div>
+								<div class="bwl--d">
+									<component :is="attrBasicLabelChartView" :sku-id="productId"></component>
+								</div>
+								<div class="bwr--d">
+									<component :is="emotionBasicLabelChartView" :sku-id="productId"></component>
+								</div>
+										
+							</div>
+						</div>
+					</div>
+					<div id="saleAnalysis" class="tab-pane" data-name="tab3">
+						<div class="clearfix">
+							<div class="bwl--half">
+								<div class="block clearfix" style="height: 346px;">
+									<div class="section clearfix">
+										<span class="title-prefix-md">产品销售数量</span>
+										<el-select placeholder="按季度" v-model="productSaleQuery.season">
+											<el-option v-for="item in productSaleQuery.options"
+												:key="item.value"
+												:label="item.label"
+												:value="item.value">
+											</el-option>
+										</el-select>
+									</div>
+									<component :is='productSalesTableView' :sku-id='productId'
+										:need-load.sync="tab3NeedLoad"></component>									
+								</div>
+								
+							</div>
+							<div class="bwr--half">
+								<div class="block clearfix" style="height: 346px;">
+									<div class="section clearfix" style="margin-bottom: 5px;">
+										<span class="title-prefix-md">产品价格走势</span>
+										<el-select placeholder="按年份" v-model="productPriceTrendQuery.year"></el-select>
+									</div>
+									<component :is="productPriceTrendChartView" :sku-id="productId"></component>	
+								</div>
+							</div>
+						</div>
+						<div class="clearfix">
+							<div class="bwl--half">
+								<div class="block clearfix" style="height: 346px;">
+									<div class="section clearfix">
+										<span class="title-prefix-md">月销量</span>
+									</div>
+									<component :is="productMonthCountTableView" :sku-id="productId"></component>
+								</div>
+							</div>
+							<div class="bwr--half">
+								<div class="block clearfix" style="height: 346px;">
+									<div class="section clearfix">
+										<span class="title-prefix-md">月销售额</span>
+									</div>
+									<component :is='productMonthAmountTableView' :sku-id='productId'></component>
+								</div>
+							</div>
+						</div>
+						<div class="block clearfix">
+							<div class="bwl--b" style="height: 400px;">
+								<div class="section clearfix">
+									<span class="title-prefix-md">销售价格市场分布</span>
+									<div class="brand-title fr">销售额市场占比</div>
+								</div>
+								<component :is='priceSpreadChartView' :sku-id='productId'></component>
+							</div>
+							<div class="bwr--b" style="height: 400px;">
+								<component :is='mapPriceChartView' :sku-id='productId'></component>
+								
+							</div>
+						</div>
+						<div class="block clearfix">
+							<div class="bwl--b" style="height: 580px;">
+								<div class="section clearfix">
+									<span class="title-prefix-md">促销方式</span>
+									<el-select placeholder="按季度" v-model="promotionWaysQuery.season"></el-select>
+								</div>
+								<component :is='promotionWaysTableView' :sku-id='productId'></component>
+							</div>
+							<div class="bwr--b" style="height: 580px;">
+								<div class="circle--promotion-ways">
+									<div class="circle__content" style="top: 29px;left: 152px;"><a href="javascript:">微信营销</a></div>
+									<div class="circle__content" style="top: 71px;left: 52px;"><a href="javascript:">平台营销</a></div>
+									<div class="circle__content" style="top: 173px;left: 12px;"><a href="javascript:">LBS营销</a></div>
+									<div class="circle__content" style="top: 277px;left: 51px;"><a href="javascript:">移动展示</a></div>
+									<div class="circle__content" style="top: 317px;left: 152px;"><a href="javascript:">移动兑奖</a></div>
+									<div class="circle__content" style="top: 276px;left: 248px;"><a href="javascript:">二维码营销</a></div>
+									<div class="circle__content" style="top: 173px;left: 297px;"><a href="javascript:">短彩信</a></div>
+									<div class="circle__content" style="top: 71px;left: 257px;"><a href="javascript:">APP营销</a></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div id="commentAnalysis" class="tab-pane" data-name="tab4">
+						<div class="bwl--half">
+							<div class="block clearfix" style="height: 346px;">
+								<div class="section clearfix">
+									<span class="title-prefix-md">产品评论活跃度</span>
+									<el-select placeholder="网站筛选" v-model="commentQuery.website"></el-select>
+									<el-select placeholder="时间筛选" v-model="commentQuery.time"></el-select>
+								</div>
+								<component :is='commentActiveTableView' :sku-id='productId'
+									:need-load.sync="tab4NeedLoad"></component>
+							</div>
+							
+							<div class="block clearfix" style="height: 360px;">
+								<div class="section clearfix">
+									<span class="title-prefix-md">产品情感分析</span>
+								</div>
+								<component :is='emotionAnalysisTableView' :sku-id='productId'></component>
+							</div>
+							<div class="block clearfix" style="height: 346px;">
+								<div class="section clearfix">
+									<span class="title-prefix-md">用户评论热点</span>
+								</div>
+								<component :is='userCommentCloudView' :sku-id='productId'></component>
+							</div>
+							
+						</div>
+						<div class="bwr--half">
+							<div class="block clearfix" style="height: 346px;">
+								<div class="section clearfix">
+									<span class="title-prefix-md">产品好评数</span>
+								</div>
+								<component :is='goodCommentChartView' :sku-id='productId'></component>
+							</div>
+							<div class="block clearfix" style="height: 360px;">
+								<div class="section clearfix">
+									<span class="title-prefix-md">情感指数趋势</span>
+									<el-select placeholder="全部网站" v-model="emotionQuery.website">
+									</el-select>
+									<el-select placeholder="最近一周" v-model="emotionQuery.week"></el-select>
+								</div>
+								<component :is='emotionTrendTableView' :sku-id='productId'></component>
+							</div>
+							
+						</div>
+					</div>
+					<div id="competeAnalysis" class="tab-pane" data-name="tab5">
+						<div class="bwl--half">
+							<div class="block clearfix">
+								<div class="section clearfix">
+									<span class="title-prefix-md">产品亮点分析</span>
+									<el-select placeholder="人群筛选" v-model="highLightQuery.people"></el-select>
+									<el-select placeholder="产品筛选" v-model="highLightQuery.product"></el-select>
+								</div>
+								<component :is='highlightTableView' :sku-id='productId'
+									:need-load.sync="tab5NeedLoad"></component>
+							</div>
+						
+						</div>
+						<div class="bwr--half">
+							<div class="block clearfix">
+								<div class="section clearfix">
+									<span class="title-prefix-md">品牌销量分析</span>
+									<el-select placeholder="最近一个月" v-model="saleQuery.month"></el-select>
+									<el-select placeholder="人群筛选" v-model="saleQuery.people"></el-select>
+								</div>
+								<component :is='brandSalesTableView' :sku-id='productId'></component>
+							</div>
+						
+						</div>
+					</div>
+					<!--<div id="productAnalysis" class="tab-pane" data-name="tab6">
+						<div class="bwl--half">
+							<div class="block clearfix">
+								<div class="section clearfix">
+									<span class="title-prefix-md">产品分类</span>
+								</div>
+								<div class="table-wrapper">
+									<el-table :data="categoryData" stripe >
+										
+										<el-table-column 
+											label="型号" 
+											prop="1" 
+											align="center"
+											width="150"
+											:show-overflow-tooltip="true"> 
+										</el-table-column>
+										<el-table-column 
+											label="属性" 
+											prop="2"
+											align="center"
+											:show-overflow-tooltip="true">
+										</el-table-column>
+										<el-table-column label="价格" 
+											prop="3"
+											align="center"
+											width="120"
+											:show-overflow-tooltip="true"> 
+										</el-table-column>
+									</el-table>
+								</div>
+								
+							</div>
+						</div>
+					</div>-->
+				</div>
+				
+				
+			</div>
+			
+		</div>
+		<script src="lib/seajs/sea.js" type="text/javascript" charset="utf-8" id="seajsnode"></script>
+		<script src="lib/moment/moment.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/jquery/jquery-3.2.1.js"></script>
+		<script src="lib/undersore/underscore-min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/util.js?v=9b0fe388f8" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/jqcloud/jqcloud-1.0.4.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/vue/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/element/index.js"></script>
+		<script src="lib/echarts/echarts.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/echarts/china.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/frame.js?v=1a186af193" type="text/javascript" charset="utf-8"></script>
+		<script src="js/product_analysis.js?v=fa095f5bce" type="text/javascript" charset="utf-8"></script>
+	</body>
+</html>

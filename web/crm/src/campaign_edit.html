@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>campaign</title>
+		<!-- 引入样式 -->
+		<link rel="stylesheet" type="text/css" href="lib/element/theme-default/index.css"/>
+		<link rel="stylesheet/less" type="text/css" href="css/frame.less?v=2e1bc33d12"/>
+		<link rel="stylesheet/less" type="text/css" href="css/public.less?v=a99bafa08b"/>
+		<link rel="stylesheet/less" type="text/css" href="css/campaign/offer.less"/>
+		<link rel="stylesheet/less" type="text/css" href="css/campaign/campaign.less"/>
+		<script src="lib/less/less-1.7.0.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="app" id="app">
+			<prs-header></prs-header>
+			<div class="content">
+				<nav-product 
+					:options="pages.urls" 
+					v-model="pages.curPage"
+					:path="pages.path">
+				</nav-product>
+				<div class="box clearfix user-list" v-show="isCampaign" v-cloak>
+					<div class="main-title" v-cloak>{{operatortype}} Campaign</div>
+					<div class="box__content">
+						<el-form ref="campaignForm" 
+							:model="form"
+							:rules="rules"
+							label-width="50px">
+							<div class="clearfix">
+								<el-col :span="11">
+									<el-form-item label="Title:" prop="title">
+										<el-input v-model="form.title"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="11">
+									<el-form-item prop="allowMultiple">
+										<el-checkbox v-model="form.allowMultiple">One offer limited for each client</el-checkbox>
+									</el-form-item>
+								</el-col>
+							</div>
+							<div class="clearfix">
+								<el-col :span="11">
+									<el-form-item label="Begin:" 
+										prop="startDate">
+										<el-date-picker
+									    	type="datetime"
+									    	placeholder="select a date"
+									    	:picker-options="pickerOptions1"
+									    	v-model="form.startDate">
+									    </el-date-picker>
+									</el-form-item>
+								</el-col>
+								<!--<el-col :span="5">-</el-col>-->
+								<el-col :span="6">
+									<el-form-item label="End:" 
+										prop="endDate"
+										style="margin-left: 43px;">
+										<el-date-picker
+									    	type="datetime"
+									    	placeholder="select a date"
+									    	:picker-options="pickerOptions2"
+									    	v-model="form.endDate">
+									    </el-date-picker>
+									</el-form-item>
+								</el-col>
+							</div>
+						
+							<div class="search-wrapper">
+								<el-button type="primary" class="el-btn--md" style="margin-bottom: 14px;"
+									@click="handleMappingAdd">New</el-button>
+							</div>
+							
+							<div class="table-wrapper" style="margin-bottom: 36px;">
+								<el-form-item prop="detail"
+									label-width="0">
+									<el-table
+								     	:data="form.detail"
+								     	stripe
+								     	style="width: 100%">
+								     	<el-table-column
+									        prop="offerTitle"
+									        label="Title"
+									        align="left"
+									        min-width="50"
+									        :show-overflow-tooltip="true">
+								      	</el-table-column>
+								     	<el-table-column
+									        prop="audience"
+									        label="Audience"
+									        align="left"
+									        min-width="75"
+									        :show-overflow-tooltip="true">
+									        <template scope="scope">
+									        	{{ showAudienceTitles(scope.row['audience']) }}
+									        </template>
+								      	</el-table-column>
+								     	<el-table-column
+									        prop="member"
+									        label="Members"
+									        align="left"
+									        min-width="20"
+									        :show-overflow-tooltip="true">
+								      	</el-table-column>
+								      	<el-table-column
+									        label="Operations"
+									        align="left"
+									        min-width="25"
+									        :show-overflow-tooltip="true">
+									        <template scope="scope">
+									        	<span class="operation operation--edit" @click="handleMappingEdit(scope.$index)">Edit</span>
+									        	<span class="operation operation--delete" @click="handleMappingDelete(scope.$index)">Delete</span>
+									        </template>
+								      	</el-table-column>
+								    </el-table>
+							    </el-form-item>
+							</div>
+							<div class="footer">
+								<div class="footer__btns">
+									<el-button class="el-btn--md footer_btn--left" type="primary" @click="handleCampaignSave('campaignForm')">Save</el-button>
+									<el-button class="el-btn--md footer_btn--right el-button--cancel" @click="handleCampaignCancelSave">Cancel</el-button>
+								</div>
+							</div>
+						</el-form>
+					</div>
+				</div>
+				
+				<!--offer mapping-->
+				<div class="box clearfix user-list" v-show="!isCampaign" v-cloak>
+					<div class="main-title">Offer Mapping</div>
+					<div class="box__content clearfix">
+						<el-form ref="offerForm" :model="mapping" label-width="0"
+							:rules="mappingRules">
+							<div class="clearfix">
+								
+								<div class="campaign-content__left fl box-radius">
+									<div class="main-title">Offer</div>
+										<div class="campaign-offer">
+											<div class="campaign-offer__title" v-text="mapping.offer.title"></div>
+											<el-form-item prop="offer.content">
+												<div class="campaign-images">
+													<template 
+														v-for="(content, index) in mapping.offer.content">
+														<div class="offer-image-first-wrapper"
+															v-if="index == 0">
+															<div class="offer-image-first__img bg-img-cover" :style="{backgroundImage:getContentImage(content['image'])}">
+																<div class="offer-image-first__text" v-text="content['title']"></div>
+															</div>
+														</div>
+														<div class="offer-image-other-wrapper"
+															v-else>
+															<div class="offer-image-other__text fl" v-text="content.title"></div>
+															<div class="offer-image-other__img fr bg-img-cover"
+																:style="{backgroundImage:getContentImage(content['image'])}"></div>
+														</div>
+													</template>
+													<div class="campaign-offer__placeholder" v-show="!mapping.offer.id"
+														@click="dialogOfferVisible=true">
+														Click here to select an offer.
+													</div>
+												</div>
+												<div class="campaign-offer__btn clearfix" v-show="mapping.offer.id"
+													@click="dialogOfferVisible=true">Replace</div>
+											</el-form-item>
+										</div>
+								</div>
+								
+								<div class="campaign-content__right fr box-radius">
+									<div class="main-title">Audiences</div>
+									<div class="box-radius__main">
+										<div class="search-wrapper">
+											<el-button type="primary" class="el-btn--md" style="margin-bottom: 14px;"
+												@click="dialogAudienceVisible=true">Add</el-button>
+										</div>
+										<div class="table-wrapper" style="margin-bottom: 36px;">
+											<el-form-item prop="audience">
+												<el-table
+											     	:data="mapping.audience"
+											     	stripe
+											     	style="width: 100%">
+											     	<el-table-column
+												        prop="name"
+												        label="Title"
+												        align="left"
+												        min-width="50"
+												        :show-overflow-tooltip="true">
+											      	</el-table-column>
+											     	<el-table-column
+												        prop="member"
+												        label="Members"
+												        align="left"
+												        min-width="25"
+												        :show-overflow-tooltip="true">
+											      	</el-table-column>
+											      	<el-table-column
+												        label="Operations"
+												        align="left"
+												        min-width="25"
+												        :show-overflow-tooltip="true">
+												        <template scope="scope">
+												        	<span class="operation operation--delete" @click="handleAudienceDelete(scope.row['id'])">Delete</span>
+												        </template>
+											      	</el-table-column>
+											    </el-table>
+										    </el-form-item>
+										</div>
+									</div>
+									
+								</div>
+							
+							</div>
+							<div class="footer">
+								<div class="footer__btns">
+									<el-button class="el-btn--md footer_btn--left" type="primary" @click="handleMappingSave">Save</el-button>
+									<el-button class="el-btn--md footer_btn--right el-button--cancel" @click="handleMappingCancelSave">Cancel</el-button>
+								</div>
+							</div>
+						</el-form>
+					</div>
+				</div>
+			</div>
+			
+			<!--dialogAudience-->
+			<el-dialog title="Select Audiences" :visible.sync="dialogAudienceVisible" v-cloak
+				:show-close="false">
+			 	<div class="search-wrapper clearfix">
+					<div class="search-right fr clearfix">
+						<div class="search__input fl" style="width: 200px;">
+							<el-input v-model="table.audience.searchInput" @keyup.enter.native="handleAudienceSearch"></el-input>
+						</div>
+						<el-button type="primary" class="el-btn--md fl" style="margin-bottom: 14px;"
+							@click="handleAudienceSearch">Search</el-button>
+					</div>
+				</div>
+			 	<el-table
+			 		ref="allAudienceTable"
+			 		:data="table.audience.tableData"
+			 		v-loading="table.audience.loading"
+			 		stripe
+			 		row-key="id"
+			 		@selection-change="handleAudienceSelectionChange">
+			    	<el-table-column type="selection" width="55"
+			    		reserve-selection></el-table-column>
+			    	<el-table-column prop="name" label="Title"></el-table-column>
+			    	<!--<el-table-column prop="member" label="Members"></el-table-column>-->
+			    	<el-table-column prop="updateDate" label="Updated">
+			    		<template scope="scope">
+				        	{{ scope.row['updateDate'] | date }}
+				        </template>
+			    	</el-table-column>
+			 	</el-table>
+			 	<el-pagination
+			      	@size-change="handleAudienceSizeChange"
+			      	@current-change="handleAudienceCurrentChange"
+			      	:current-page="table.audience.pagination.currentPage"
+			      	:page-sizes="[20, 10, 2]"
+			      	:page-size="table.audience.pagination.pageSize"
+			      	layout="total, slot, sizes, prev, pager, next, jumper"
+			      	:total="table.audience.pagination.total">
+			    </el-pagination>
+			 	<span slot="footer" class="dialog-footer">
+			 		<el-button class="el-btn--md" type="primary" @click="handleAudienceConfirm">Select</el-button>
+				    <el-button class="el-btn--md el-button--cancel" @click="handleAudienceCancel">Cancel</el-button>
+				 </span>
+			</el-dialog>
+			
+			
+			<!--dialogOffer-->
+			<el-dialog title="Select An Offer" :visible.sync="dialogOfferVisible" v-cloak
+				:show-close="false">
+			 	<div class="search-wrapper clearfix">
+					<div class="search-right fr clearfix">
+						<div class="search__input fl" style="width: 200px;">
+							<el-input v-model="table.offer.searchInput" @keyup.enter.native="handleOfferSearch"></el-input>
+						</div>
+						<el-button type="primary" class="el-btn--md fl" style="margin-bottom: 14px;"
+							@click="handleOfferSearch">Search</el-button>
+					</div>
+				</div>
+			 	<el-table
+			 		ref="allOfferTable"
+			 		:data="table.offer.tableData"
+			 		v-loading="table.offer.loading"
+			 		stripe
+			 		highlight-current-row
+    				@current-change="handleOfferSelectChange"
+    				class="offer-dialog">
+    				<el-table-column width="55">
+    					<template scope="scope">
+				        	 <el-radio v-model="table.offer.radio" :label="scope.row['id']"></el-radio>
+				        </template>
+    				</el-table-column>
+			    	<el-table-column prop="title" label="Title"></el-table-column>
+			    	<el-table-column prop="createBy" label="Owner"></el-table-column>
+			    	<el-table-column prop="updateDate" label="Updated">
+			    		<template scope="scope">
+				        	{{ scope.row['updateDate'] | date }}
+				        </template>
+			    	</el-table-column>
+			 	</el-table>
+			 	<el-pagination
+			      	@size-change="handleOfferSizeChange"
+			      	@current-change="handleOfferCurrentChange"
+			      	:current-page="table.offer.pagination.currentPage"
+			      	:page-sizes="[20, 10, 5]"
+			      	:page-size="table.offer.pagination.pageSize"
+			      	layout="total, slot, sizes, prev, pager, next, jumper"
+			      	:total="table.offer.pagination.total">
+			    </el-pagination>
+			 	<span slot="footer" class="dialog-footer">
+			 		<el-button class="el-btn--md" type="primary" @click="handleOfferConfirm">Select</el-button>
+				    <el-button class="el-btn--md el-button--cancel" @click="handleOfferCancel">Cancel</el-button>
+				 </span>
+			</el-dialog>
+		</div>
+		<script src="lib/seajs/sea.js" type="text/javascript" charset="utf-8" id="seajsnode"></script>
+		<script src="lib/moment/moment.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/jquery/jquery-3.2.1.js"></script>
+		<script src="lib/undersore/underscore-min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/util.js?v=7ebe57a410" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/vue/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/element/index.js"></script>
+		<script src="lib/element/umd/locale/en.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/local.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/frame.js?v=d3677ee7a5" type="text/javascript" charset="utf-8"></script>
+		<script src="js/campaign/campaign_edit.js" type="text/javascript" charset="utf-8"></script>
+	</body>
+</html>

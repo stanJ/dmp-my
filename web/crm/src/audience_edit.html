@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>audience</title>
+		<!-- 引入样式 -->
+		<link rel="stylesheet" type="text/css" href="lib/element/theme-default/index.css"/>
+		<link rel="stylesheet/less" type="text/css" href="css/frame.less?v=2e1bc33d12"/>
+		<link rel="stylesheet/less" type="text/css" href="css/public.less?v=a99bafa08b"/>
+		<link rel="stylesheet/less" type="text/css" href="css/campaign/audience.less"/>
+		<script src="lib/less/less-1.7.0.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="app" id="app">
+			<prs-header></prs-header>
+			<div class="content">
+				<nav-product 
+					:options="pages.urls" 
+					v-model="pages.curPage"
+					:path="pages.path">
+				</nav-product>
+				<div class="box clearfix user-list" v-cloak>
+					<div class="main-title" v-cloak>{{operatortype}} Audience</div>
+					<div class="box__content">
+						<el-form ref="audienceForm" 
+							:model="form"
+							:rules="rules"
+							label-width="50px">
+							<div class="clearfix">
+								<el-form-item label="Title:" prop="title">
+									<el-input v-model="form.title"></el-input>
+								</el-form-item>
+							</div>
+							<el-form-item label="Type:" prop="type">
+								<el-radio :disabled="isEdit" v-model="form.type" :label="2">Dynamic</el-radio>
+  								<el-radio :disabled="isEdit" v-model="form.type" :label="1">Static</el-radio>
+							</el-form-item>
+							<div class="audience-detail" v-if="form.type==2">
+								<div class="search-wrapper">
+									<el-button type="primary" class="el-btn--md" style="margin-bottom: 14px;"
+										@click="handleFieldAdd">New</el-button>
+								</div>
+								<div class="table-wrapper" style="margin-bottom: 36px;">
+									<el-form-item prop="detail"
+										label-width="0">
+										<el-table
+									     	:data="form.detail"
+									     	stripe
+									     	style="width: 100%"
+									     	:key="detailKey">
+									     	<el-table-column
+										        prop="fieldText"
+										        label="Field"
+										        align="left"
+										        min-width="50"
+										        :show-overflow-tooltip="true">
+									      	</el-table-column>
+									     	<el-table-column
+										        prop="valuesText"
+										        label="Values"
+										        align="left"
+										        min-width="250"
+										        :show-overflow-tooltip="true">
+									      	</el-table-column>
+									      	<el-table-column
+										        label="Operations"
+										        align="left"
+										        min-width="50"
+										        :show-overflow-tooltip="true">
+										        <template scope="scope">
+										        	<span class="operation operation--edit" @click="handleFieldEdit(scope.row)">Edit</span>
+										        	<span class="operation operation--delete" @click="handleFieldDelete(scope.$index)">Delete</span>
+										        </template>
+									      	</el-table-column>
+									    </el-table>
+								    </el-form-item>
+								</div>
+							</div>
+							<div class="audience-detail" v-else>
+								<div class="search-wrapper">
+									<el-button type="primary" class="el-btn--md" style="margin-bottom: 14px;"
+										@click="handleWechatAdd">Add</el-button>
+								</div>
+								<div class="table-wrapper" style="margin-bottom: 36px;">
+									<el-form-item prop="detail"
+										label-width="0">
+										<el-table
+									     	:data="form.detail"
+			 								v-loading="table.mywechat.loading"
+									     	stripe
+									     	style="width: 100%"
+									     	:key="detailKey">
+									     	<el-table-column
+										        label="User"
+										        align="left"
+										        min-width="50"
+										        :show-overflow-tooltip="true">
+										        <template scope="scope">
+										        	<div class="wechat__avatar" :style="{backgroundImage: getImage(scope.row['headImgUrl'])}"></div>
+										        	<span class="wechat_nickname" v-text="scope.row['nickName']"></span>
+										        </template>
+									      	</el-table-column>
+									     	<el-table-column
+										        prop="sex"
+										        label="Gender"
+										        align="left"
+										        min-width="50"
+										        :show-overflow-tooltip="true">
+									      	</el-table-column>
+									     	<el-table-column
+										        prop="fieldConcat"
+										        label="Tags"
+										        align="left"
+										        min-width="250"
+										        :show-overflow-tooltip="true">
+									      	</el-table-column>
+									      	<el-table-column
+										        label="Operations"
+										        align="left"
+										        min-width="40"
+										        :show-overflow-tooltip="true">
+										        <template scope="scope">
+										        	<span class="operation operation--delete" @click="handleWechatDelete(scope.$index)">Delete</span>
+										        </template>
+									      	</el-table-column>
+									    </el-table>
+									    <!--<el-pagination
+									      	@size-change="handleMyWechatSizeChange"
+									      	@current-change="handleMyWechatCurrentChange"
+									      	:current-page="table.mywechat.pagination.currentPage"
+									      	:page-sizes="[20, 10, 2]"
+									      	:page-size="table.mywechat.pagination.pageSize"
+									      	layout="total, slot, sizes, prev, pager, next, jumper"
+									      	:total="table.mywechat.pagination.total">
+									    </el-pagination>-->
+								    </el-form-item>
+								</div>
+							</div>
+							
+							<div class="footer">
+								<div class="footer__btns">
+									<el-button class="el-btn--md footer_btn--left" type="primary" @click="handleAudienceSave('audienceForm')">Save</el-button>
+									<el-button class="el-btn--md footer_btn--right el-button--cancel" @click="handleAudienceCancelSave">Cancel</el-button>
+								</div>
+							</div>
+						</el-form>
+					</div>
+				</div>
+				
+			</div>
+			
+			<!--dialogField-->
+			<el-dialog title="Audience Filter" 
+				:visible.sync="dialogFieldVisible" 
+				@close="handleDialogFieldClose"
+				v-cloak
+				:show-close="false">
+			 	<div class="search-wrapper clearfix">
+			 		<el-form ref="fieldForm" 
+						:model="fieldForm"
+						:rules="fieldRules"
+						label-width="50px"
+						class="fieldForm">
+						<el-form-item label="Field:" prop="fieldId">
+							<el-col :span="10">
+								<el-select v-model="fieldForm.fieldId" :disabled="isDisable" v-if="isDisable">
+									<el-option v-for="item in fieldTypes"
+										:label="item.name" :value="item.id"
+										:key="item.id"></el-option>
+								</el-select>
+								<el-select v-model="fieldForm.fieldId"  v-else>
+									<el-option v-for="item in availableFieldTypes"
+										:label="item.name" :value="item.id"
+										:key="item.id"></el-option>
+								</el-select>
+							</el-col>
+							
+						</el-form-item>
+						<el-form-item label="Value:" prop="valuesIds" 
+							class="field__values"
+							label-width="0">
+							
+							<div class="fields-wrapper">
+							</div>
+								
+						</el-form-item>
+					</el-form>
+				</div>
+			 	
+			 	<span slot="footer" class="dialog-footer">
+			 		<el-button class="el-btn--md" type="primary" @click="handleFieldConfirm('fieldForm')">Select</el-button>
+				    <el-button class="el-btn--md el-button--cancel" @click="handleFieldCancel">Cancel</el-button>
+				 </span>
+			</el-dialog>
+			
+			<!--dialogWechat-->
+			<el-dialog title="Add Users" 
+				:visible.sync="dialogWechatVisible" 
+				:show-close="false"
+				v-cloak>
+			 	<div class="search-wrapper clearfix">
+					<div class="search-right fr clearfix">
+						<div class="search__input fl" style="width: 200px;">
+							<el-input v-model="table.wechat.searchInput" @keyup.enter.native="handleWechatSearch"></el-input>
+						</div>
+						<el-button type="primary" class="el-btn--md fl" style="margin-bottom: 14px;"
+							@click="handleWechatSearch">Search</el-button>
+					</div>
+				</div>
+			 	<el-table
+			 		ref="allWechatTable"
+			 		:data="table.wechat.tableData"
+			 		v-loading="table.wechat.loading"
+			 		stripe
+			 		row-key="id"
+			 		@selection-change="handleWechatSelectionChange">
+			    	<el-table-column type="selection" width="40"
+			    		reserve-selection></el-table-column>
+			    	<el-table-column
+				        label="User"
+				        align="left"
+				        min-width="70"
+				        :show-overflow-tooltip="true">
+				        <template scope="scope">
+				        	<div class="wechat__avatar" :style="{backgroundImage: getImage(scope.row['headImgUrl'])}"></div>
+				        	<span class="wechat_nickname" v-text="scope.row['nickName']"></span>
+				        </template>
+			      	</el-table-column>
+			     	<el-table-column
+				        prop="sex"
+				        label="Gender"
+				        align="left"
+				        min-width="50"
+				        :show-overflow-tooltip="true">
+			      	</el-table-column>
+			     	<el-table-column
+				        prop="fieldConcat"
+				        label="Tags"
+				        align="left"
+				        min-width="150"
+				        :show-overflow-tooltip="true">
+			      	</el-table-column>
+			 	</el-table>
+			 	<el-pagination
+			      	@size-change="handleWechatSizeChange"
+			      	@current-change="handleWechatCurrentChange"
+			      	:current-page="table.wechat.pagination.currentPage"
+			      	:page-sizes="[20, 10, 2]"
+			      	:page-size="table.wechat.pagination.pageSize"
+			      	layout="total, slot, sizes, prev, pager, next, jumper"
+			      	:total="table.wechat.pagination.total">
+			    </el-pagination>
+			 	
+			 	<span slot="footer" class="dialog-footer">
+			 		<el-button class="el-btn--md" type="primary" @click="handleWechatConfirm">Select</el-button>
+				    <el-button class="el-btn--md el-button--cancel" @click="handleWechatCancel">Cancel</el-button>
+				 </span>
+			</el-dialog>
+		</div>
+		<script src="lib/seajs/sea.js" type="text/javascript" charset="utf-8" id="seajsnode"></script>
+		<script src="lib/moment/moment.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/jquery/jquery-3.2.1.js"></script>
+		<script src="lib/undersore/underscore-min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/util.js?v=7ebe57a410" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/vue/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/element/index.js"></script>
+		<script src="lib/element/umd/locale/en.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/local.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/frame.js?v=d3677ee7a5" type="text/javascript" charset="utf-8"></script>
+		<script src="js/campaign/audience_edit.js" type="text/javascript" charset="utf-8"></script>
+	</body>
+</html>

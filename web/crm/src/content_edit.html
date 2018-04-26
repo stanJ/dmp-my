@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>content</title>
+		<!-- 引入样式 -->
+		<link rel="stylesheet" type="text/css" href="lib/element/theme-default/index.css"/>
+		<link rel="stylesheet/less" type="text/css" href="css/frame.less?v=2e1bc33d12"/>
+		<link rel="stylesheet/less" type="text/css" href="css/public.less?v=a99bafa08b"/>
+		<link rel="stylesheet/less" type="text/css" href="css/campaign/content.less"/>
+		<script src="lib/less/less-1.7.0.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="app" id="app">
+			<prs-header></prs-header>
+			<div class="content">
+				<nav-product 
+					:options="pages.urls" 
+					v-model="pages.curPage"
+					:path="pages.path"
+				>
+				</nav-product>
+				<div class="box clearfix">
+					<div class="main-title">{{operatortype}} Content</div>
+					<div class="box__content">
+						<el-form label-position="left" label-width="120px" 
+							ref="contentForm"
+							:model="form"
+							:rules="rules">
+							<el-form-item label="Title:" prop="title">
+						  		<el-input v-model="form.title" name="title"></el-input>
+						    </el-form-item>
+						    <el-form-item label="Thumbnail:" prop="contentImage">
+						    	<el-form-item label-width="0" prop="pic">
+							  		<div class="content-thumbnail">
+							  			<div>&nbsp;</div>
+							  			<div>
+							  				<span>Note:</span>
+							  				<span>Please select an image with 360*200 pixels.<br />JPG and PNG format are supported.</span>
+							  				<span class="wrapper">
+							  					<input @change="picChange" type="file" name="contentimage" id="contentimage" />
+							  					<el-button type="primary">Select</el-button>
+							  					<el-button @click="deletePreImg" :disabled="true">Clear</el-button>
+							  				</span>
+							  			</div>
+							  		</div>
+						  		</el-form-item>
+						    </el-form-item>
+						    <el-form-item label="Digest:" prop="description">
+						    	<el-input type="textarea"
+						    		v-model="form.description" 
+						    		name="description" 
+						    		class="content-digest"
+						    		:rows="7"
+						    		placeholder="Recommand 20-150 words."></el-input>
+						    	<!--<textarea v-model="form.description" name="description" class="content-digest" placeholder="Recommand 20-150 words."></textarea>-->
+						    </el-form-item>
+						    <el-form-item label="Content Page:" prop="contentHtml">
+						    	<textarea id="contentcontentcn" name="contentcontentcn"></textarea>
+						    </el-form-item>
+						</el-form>
+						
+						<div class="footer">
+							<div class="footer__btns">
+								<el-button class="el-btn--md footer_btn--left" type="primary" @click="handleSave">Save</el-button>
+								<el-button class="el-btn--md footer_btn--right el-button--cancel" @click="handleCancelSave">Cancel</el-button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		<script src="lib/seajs/sea.js" type="text/javascript" charset="utf-8" id="seajsnode"></script>
+		<script src="lib/moment/moment.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/jquery/jquery-3.2.1.js"></script>
+		<script src="lib/undersore/underscore-min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/util.js?v=7ebe57a410" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/vue/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/element/index.js"></script>
+		<script src="lib/element/umd/locale/en.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/local.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/frame.js?v=d3677ee7a5" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/ckeditor/ckeditor.js"></script>
+		<script src="js/campaign/content_edit.js" type="text/javascript" charset="utf-8"></script>
+	</body>
+</html>

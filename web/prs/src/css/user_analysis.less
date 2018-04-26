@@ -1,0 +1,341 @@
+@import "variables";
+
+.bwl--b{
+    width: 22.6%;
+    padding-right: 10px;
+    position: relative;
+	
+}
+.bwr--b{
+	width: 77.4%;
+	padding-left: 10px;
+	
+}
+.bwl--b:after{
+	content: '';
+    height: 408px;
+    border-right: 1px solid #d8d8d8;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.bwl--c{
+    width: 50%;
+    padding-right: 10px;
+    position: relative;
+	
+}
+.bwr--c{
+	width: 50%;
+	padding-left: 10px;
+	
+}
+.bwl--c:after{
+	content: '';
+    height: 300px;
+    border-right: 1px solid #d8d8d8;
+    position: absolute;
+    right: 0px;
+    top: -36px;
+}
+.bwl--d{
+    width: 47.7%;
+    padding-right: 10px;
+    position: relative;
+    
+	
+}
+.bwr--d{
+	width: 52.3%;
+	padding-left: 10px;
+	
+}
+.bwl--d:after{
+    content: '';
+    height: 462px;
+    border-right: 1px solid #d8d8d8;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+}
+.bwl--e{
+    width: 37.5%;
+    padding-right: 10px;
+    position: relative;
+	
+}
+.bwr--e{
+	width: 62.5%;
+	padding-left: 10px;
+	
+}
+.bwl--e:after{
+    content: '';
+    height: 400px;
+    border-right: 1px solid #d8d8d8;
+    position: absolute;
+    right: 0px;
+    top: 5px;
+}
+.bwl--f{
+    width: 37.9%;
+    padding-right: 10px;
+    position: relative;
+	
+}
+.bwr--f{
+	width: 62.1%;
+	padding-left: 10px;
+	
+}
+.bwl--f:after{
+    content: '';
+    height: 380px;
+    border-right: 1px solid #d8d8d8;
+    position: absolute;
+    right: 0px;
+    top: 20px;
+}
+.chart--line1{
+	height: 280px;
+}
+.chart--line2{
+	height: 280px;
+}
+.chart--line3{
+	height: 280px;
+}
+.chart--pie1{
+	height: 300px;
+}
+.chart--map1{
+	height: 340px;
+}
+.chart--bar-h1{
+	height: 276px;
+}
+.chart--bar-h2{
+	height: 276px;
+}
+.chart--bar-h3{
+	height: 300px;
+}
+.chart--bar-h4{
+	height: 300px;
+}
+.chart--radar1{
+	height: 320px;
+	margin-top: 20px;
+}
+/*用户分析css*/
+.query-control{
+	float: right;
+}
+.cards{
+    margin: 0 auto;
+	padding: 0 10px;
+}
+.card{
+    background: #f4f4f4;
+    width: 160px;
+    height: 273px;
+    margin-right: 3.5%;
+    float: left;
+	
+}
+.card__title{
+	height: 40px;
+    text-align: center;
+    font-size: 14px;
+    padding: 4px 0;
+    color: #fff;
+}
+.card--purple>.card__title{
+	background: @card1-color;
+}
+.card--blue>.card__title{
+	background: @card2-color;
+}
+.card--green>.card__title{
+	background: @card3-color;
+}
+.card:last-of-type{
+	margin-right: 0px;
+}
+.card__avator{
+	width: 78px;
+	height: 78px;
+	margin: 0 auto;
+	border-radius: 39px;
+	margin-top: 10px;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+.card__personality{
+    height: 115px;
+	margin-top: 10px;
+}
+.title--reason{
+    font-size: 18px;
+    font-weight: bold;
+    margin-left: 27px;
+    margin-top: 34px;
+    margin-bottom: 30px;
+}
+.cards--reason{
+	margin-left: 20px;
+}
+.cards--reason>.card{
+	margin-right: 40px;
+}
+.card__reason{
+	margin-top: 20px;
+}
+.reason__main{
+    font-size: 14px;
+    padding: 0 4px 0 20px;
+    margin: 12px 0;
+    /*font-family: pingfang_medium;*/
+}
+.card--purple .reason__main{
+	color: @card1-color;
+}
+.card--blue .reason__main{
+	color: @card2-color;
+}
+.card--green .reason__main{
+	color: @card3-color;
+}
+.reason__ul{
+	font-size: 12px;
+	padding-right: 20px;
+}
+.row{
+	margin: 10px 10px 10px 20px;
+	font-size: 14px;
+	font-weight: bold;
+}
+.row__left{
+    height: 40px;
+	line-height: 40px;
+}
+.blue-text{
+	color: @export-color;
+}
+.tabs--card{
+	height: 125px;
+	padding: 0 10px; 
+	transform: scale(0.8);
+    width: 123%;
+    margin-left: -12.3%;
+}
+.tab--card{
+    height: 100%;
+    background: #f4f4f4;
+    box-sizing: border-box;
+    border: 1px solid #d8d8d8;
+    border-left: 0;
+    width: 14.2%;
+    float: left;
+}
+.tab--card:first-of-type{
+	margin-left: 0.3%;
+	border-left: 1px solid #d8d8d8;
+}
+.tc__main{
+    text-align: center;
+    margin: 10px 0;
+    font-size: 16px;
+}
+.tc__percent{
+	margin: 0 25px;
+}
+.tab--card.is-active{
+	border-top:2px solid @tab-card-active-color;
+	background: #fff;
+}
+.visitor-wrapper{
+	margin: 0 10px;
+	box-shadow: 0 0 5px 1px #dbdbdb;
+}
+.visitor__bottom{
+	margin-top: 10px;
+}
+.vt__left{
+	font-size: 14px;
+    font-weight: bold;
+    margin: 26px 0 0 12px;
+}
+.vt__right{
+	margin: 10px 10px 0 0;
+}
+.vtr__box{
+    border: 1px solid #ebebeb;
+    padding: 13px 10px;
+    font-size: 14px;
+    margin-right: -8px;
+    float: left;
+    transform: scale(0.9);
+    width: 230px;
+	box-sizing: border-box;
+}
+.bt__sm{
+	font-size: 12px;
+	position: relative;
+	margin-right: 9px;
+}
+.vtrb__bottom{
+    font-size: 12px;
+}
+.bt__text{
+	font-weight: bold;
+}
+.bt__value{
+	margin-left: 5px;
+	font-weight: bold;
+	line-height: 19px;
+}
+.bb__value{
+	color: #de4d5f;
+	font-weight: bold;
+}
+.cw__left{
+	width: 27.7%;
+	box-sizing: border-box;
+}
+.cw__right{
+	width: 72.3%;
+	box-sizing: border-box;
+}
+.table--page-analysis .el-table__body-wrapper tr>td:first-of-type{
+	color: @table-text-color;
+}
+.table--page-analysis .el-table__body-wrapper tr>td:first-of-type .cell{
+	padding-left: 20px;
+}
+.table--page-analysis .el-table__header-wrapper tr>th:first-of-type .cell{
+	padding-left: 44px;
+}
+.table--expense-place .el-table__body-wrapper tr>td:last-of-type{
+	color: @table-text-color;
+}
+.table--buy-times .el-table__body-wrapper tr>td:last-of-type{
+	color: @table-text-color;
+}
+.table--prices .el-table__body-wrapper tr>td:nth-of-type(4){
+	color: @table-text-color;
+}
+.table--ages .el-table__body-wrapper tr>td:last-of-type{
+	color: @table-text-color;
+}
+.table--education .el-table__body-wrapper tr>td:last-of-type{
+	color: @table-text-color;
+}
+.table--income .el-table__body-wrapper tr>td:last-of-type{
+	color: @table-text-color;
+}
+.table--sex .el-table__body-wrapper tr>td:last-of-type{
+	color: @table-text-color;
+}
+			

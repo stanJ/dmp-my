@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>policy</title>
+		<!-- 引入样式 -->
+		<link rel="stylesheet" type="text/css" href="lib/element/theme-default/index.css"/>
+		<link rel="stylesheet/less" type="text/css" href="css/frame.less?v=2e1bc33d12"/>
+		<link rel="stylesheet/less" type="text/css" href="css/public.less?v=a99bafa08b"/>
+		<!--<link rel="stylesheet/less" type="text/css" href="css/recommend/policy.less"/>-->
+		<script src="lib/less/less-1.7.0.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="app" id="app">
+			<prs-header></prs-header>
+			<div class="content">
+				<nav-product 
+					:options="pages.urls" 
+					v-model="pages.curPage"
+					:path="pages.path"
+				>
+				</nav-product>
+				<div class="box clearfix">
+					<div class="main-title" v-cloak>{{operatortype}} Content Policy</div>
+					<div class="box__content">
+						<el-form ref="form" 
+							:model="form" 
+							:rules="rules"
+							label-width="50px">
+							<el-form-item label="Title:" prop="name">
+								<el-input v-model="form.name"></el-input>
+							</el-form-item>
+							<div class="bordered-box">
+								<div class="bordered-box__title">Content Categories</div>
+								<el-button type="primary" class="el-btn--md" style="margin-bottom: 14px;"
+									@click="dialogVisible=true">Add</el-button>
+								<el-form-item label-width="0" prop="contentCategory">
+									<el-table
+								     	:data="form.contentCategory"
+								     	v-loading="categoriesLoading"
+								     	stripe
+								     	style="width: 100%">
+								     	<el-table-column
+									        prop="name"
+									        label="Title"
+									        align="left"
+									        min-width="250"
+									        :show-overflow-tooltip="true">
+								      	</el-table-column>
+								     	<el-table-column
+									        prop="description"
+									        label="Description"
+									        align="left"
+									        min-width="350"
+									        :show-overflow-tooltip="true">
+									        <template scope="scope">
+									        	{{ scope.row['description'] | innerText }}
+									        </template>
+								      	</el-table-column>
+								     	<el-table-column
+									        label="Operations"
+									        align="left"
+									        min-width="120"
+									        :show-overflow-tooltip="true">
+									        <template scope="scope">
+									        	<span class="operation operation--delete" @click="handleDelete(scope.$index)">Delete</span>
+									        </template>
+								      	</el-table-column>
+								    </el-table>
+							    </el-form-item>
+							</div>
+							<div class="bordered-box" style="margin-top: 25px;">
+								<div class="bordered-box__title">User Tags</div>
+								<el-form-item label-width="0" prop="tag">
+									<el-checkbox-group v-model="form.tag" v-loading="tagLoading">
+										<div class="tag-wrapper" v-for="item in tagsData" :key="item.id">
+											<div class="tag-title" v-text="item.name"></div>
+											<div class="tag-container">
+												<el-checkbox v-cloak v-for="tag in item.children" :label="tag.id" :key="tag.id">{{ tag.name }}</el-checkbox>
+											</div>
+	
+										</div>
+									</el-checkbox-group>
+								</el-form-item>
+							</div>
+							<div class="footer">
+								<div class="footer__btns">
+									<el-button class="el-btn--md footer_btn--left" type="primary" @click="handleSave">Save</el-button>
+									<el-button class="el-btn--md footer_btn--right el-button--cancel" @click="handleCancelSave">Cancel</el-button>
+								</div>
+							</div>
+						</el-form>
+					</div>
+				</div>
+				
+			</div>
+			<el-dialog title="Content Categories" :visible.sync="dialogVisible" v-cloak
+				:show-close="false">
+			 	<el-table
+			 		ref="multipleTable"
+			 		:data="allContentCategoriesData"
+			 		v-loading="allContentCategoriesLoading"
+			 		stripe
+			 		@selection-change="handleSelectionChange">
+			    	<el-table-column type="selection" width="55"></el-table-column>
+			    	<el-table-column property="name" label="Title"></el-table-column>
+			    	<el-table-column property="description" label="Description">
+			    		<template scope="scope">
+				        	{{ scope.row['description'] | innerText }}
+				        </template>
+			    	</el-table-column>
+			 	</el-table>
+			 	<span slot="footer" class="dialog-footer">
+			 		<el-button class="el-btn--md" type="primary" @click="handleConfirm">Add</el-button>
+				    <el-button class="el-btn--md el-button--cancel" @click="handleCancel">Cancel</el-button>
+				 </span>
+			</el-dialog>
+		</div>
+		<script src="lib/seajs/sea.js" type="text/javascript" charset="utf-8" id="seajsnode"></script>
+		<script src="lib/moment/moment.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/jquery/jquery-3.2.1.js"></script>
+		<script src="lib/undersore/underscore-min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/util.js?v=7ebe57a410" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/vue/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/element/index.js"></script>
+		<script src="lib/element/umd/locale/en.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/local.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/frame.js?v=d3677ee7a5" type="text/javascript" charset="utf-8"></script>
+		<script src="js/recommend/policy_edit.js" type="text/javascript" charset="utf-8"></script>
+	</body>
+</html>

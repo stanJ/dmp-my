@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>offer</title>
+		<!-- 引入样式 -->
+		<link rel="stylesheet" type="text/css" href="lib/element/theme-default/index.css"/>
+		<link rel="stylesheet/less" type="text/css" href="css/frame.less?v=2e1bc33d12"/>
+		<link rel="stylesheet/less" type="text/css" href="css/public.less?v=a99bafa08b"/>
+		<link rel="stylesheet/less" type="text/css" href="css/campaign/offer.less"/>
+		<script src="lib/less/less-1.7.0.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="app" id="app">
+			<prs-header></prs-header>
+			<div class="content">
+				<nav-product 
+					:options="pages.urls" 
+					v-model="pages.curPage"
+					:path="pages.path"
+				>
+				</nav-product>
+				<div class="box clearfix user-list">
+					<div class="main-title">Offer</div>
+					<div class="box__content">
+						<div class="search-wrapper">
+							<el-button type="primary" class="el-btn--md" style="margin-bottom: 14px;"
+								@click="handleAdd">New</el-button>
+							<div class="search-right fr clear">
+								<div class="search__input fl">
+									<el-input v-model="searchInput" @keyup.enter.native="handleSearch"></el-input>
+								</div>
+								<el-button type="primary" class="el-btn--md fl" style="margin-bottom: 14px;"
+									@click="handleSearch">Search</el-button>
+							</div>
+						</div>
+						
+						<div class="table-wrapper" style="margin-bottom: 36px;">
+							<el-table
+						     	:data="tableData"
+						     	v-loading="loading"
+						     	stripe
+						     	style="width: 100%">
+						     	<el-table-column
+							        prop="title"
+							        label="Title"
+							        align="left"
+							        min-width="100"
+							        :show-overflow-tooltip="true">
+						      	</el-table-column>
+						     	<el-table-column
+							        prop="createBy"
+							        label="Owner"
+							        align="left"
+							        min-width="25"
+							        :show-overflow-tooltip="true">
+						      </el-table-column>
+						     	<el-table-column
+							        prop="status"
+							        label="Status"
+							        align="left"
+							        min-width="25"
+							        :show-overflow-tooltip="true">
+							        <template scope="scope">
+							        	{{ scope.row['status'] | status }}
+							        </template>
+						      	</el-table-column>
+						     	<el-table-column
+							        prop="updateDate"
+							        label="Updated"
+							        align="left"
+							        min-width="25"
+							        :show-overflow-tooltip="true">
+							        <template scope="scope">
+							        	{{ scope.row['updateDate'] | date }}
+							        </template>
+						      	</el-table-column>
+						      	<el-table-column
+							        label="Operations"
+							        align="left"
+							        min-width="25"
+							        :show-overflow-tooltip="true">
+							        <template scope="scope">
+							        	<span class="operation operation--edit" @click="handleEdit(scope.row['id'])">Edit</span>
+							        	<span class="operation operation--delete" @click="handleDelete(scope.row['id'])">Delete</span>
+							        </template>
+						      	</el-table-column>
+						    </el-table>
+						    <el-pagination
+						      	@size-change="handleSizeChange"
+						      	@current-change="handleCurrentChange"
+						      	:current-page="pagination.currentPage"
+						      	:page-sizes="[20, 10, 5]"
+						      	:page-size="pagination.pageSize"
+						      	layout="total, slot, sizes, prev, pager, next, jumper"
+						      	:total="pagination.total">
+						    </el-pagination>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		<script src="lib/seajs/sea.js" type="text/javascript" charset="utf-8" id="seajsnode"></script>
+		<script src="lib/moment/moment.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/jquery/jquery-3.2.1.js"></script>
+		<script src="js/util.js?v=7ebe57a410" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/vue/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="lib/element/index.js"></script>
+		<script src="lib/element/umd/locale/en.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/local.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/frame.js?v=d3677ee7a5" type="text/javascript" charset="utf-8"></script>
+		<script src="js/campaign/offer.js" type="text/javascript" charset="utf-8"></script>
+	</body>
+</html>

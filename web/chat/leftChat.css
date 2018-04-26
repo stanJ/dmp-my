@@ -1,0 +1,402 @@
+﻿html{
+	height:100%;
+}
+body{
+	font:12px \5FAE\8F6F\96C5\9ED1,Arial, Gadget,'微软雅黑', sans-serif;
+}
+
+
+.wrap{
+	height:calc(100% - 65px);
+}
+
+#msg_box{
+	width:100%;
+	border-top:2px solid rgb(218,60,10 );
+	height:100%;
+}
+
+
+.user-takling-box{
+	width:calc(100% - 500px);
+	height:100%;
+	background:#fff;
+	border-right:1px solid rgb(242,242,242);
+	float:left;
+}
+
+.talking-list{
+	width:30%;
+	height:100%;
+	overflow:hidden;
+	background:rgb(74,74,74);
+	float:left;
+	position:relative;
+}
+
+.talking-box{
+	background:rgb(255,255,255);
+	float:left;
+	width:70%;
+	height:100%;
+}
+
+.talking-wechartUser-list{
+	padding:5px;
+	overflow:auto;
+	height:calc(100% - 140px);
+}
+
+
+
+
+.talking-wechartUser-list li{
+	height:50px;
+	position:relative;
+	width:100%;
+	line-height:50px;
+	float:left;
+	cursor:pointer;
+}	
+
+.talking-wechartUser-list li.active{
+	background:rgba(0,0,0,0.3);	
+	font-size:14px;
+}	
+
+.talking-wechartUser-list li .userHead{
+	height:40px;
+	width:40px;
+	background:;
+	float:left;
+	margin-left:5px;
+
+}	
+
+
+.talking-wechartUser-list li .userHead img{
+	width:100%;
+	height:100%;
+}	
+
+
+.talking-wechartUser-list li .nickName{
+	float:left;
+	color:#fff;
+	margin-left:10px;
+	width:calc(100% - 60px);
+}	
+
+
+.talking-wechartUser-list li .hasMsg{
+	width:20px;
+	height:20px;
+	position:absolute;
+	right:10px;
+	top:14px;
+	background:url(../img/wechat.png) no-repeat center;
+	background-size:100%;
+	display:none;
+}
+
+
+
+
+
+
+.talking-customService-list{
+	min-height:120px;
+	width:100%;
+	background:#000;
+	position:absolute;
+	bottom:0px;
+	left:0px;
+	line-height:50px;
+}
+
+.talking-customService-list li{
+	height:60px;
+	position:relative;
+	cursor:pointer;
+}
+
+.talking-customService-list li .userHead{
+	height:40px;
+	width:40px;
+	
+	float:left;
+	margin-left:5px;
+}
+
+.talking-customService-list li .nickName{
+	float:left;
+	color:#fff;
+	margin-left:10px;
+	width:calc(100% - 60px);
+}	
+
+
+.talking-customService-list li .state {
+	width:5px;
+	height:5px;
+	position:absolute;
+	right:20px;
+	top:25px;
+}	
+
+.talking-customService-list li .online{
+	background:rgb(126,211,33);
+}	
+
+.talking-customService-list li .offline{
+	background:rgb(74,74,74);
+	margin:0px;
+}	
+
+
+
+
+/***************/
+.user-talking-box{
+	width:100%;
+	height:100%;
+	background:rgb(243,243,243);
+}
+
+.ChatLog{
+	height:70%;
+	overflow-x:auto;
+	width:auto;
+	border-bottom:rgb(129,129,129);
+	padding:10px;
+	border-bottom:1px solid rgb(129,129,129);
+	background:#fff;
+}
+
+.ChatLogInner{
+	width:100%;
+	float:left;
+}
+
+
+
+
+.userMsg{
+	float:left;
+	text-align:left;
+	width:80%;
+	min-height:20px;
+	margin-left:20px;
+	
+}
+
+	.userMsg .userHead{
+		float:left;
+		height:40px;
+		width:40px;
+		
+	}	
+
+	.userMsg  .userHead img{
+		width:100%;
+		height:100%;
+
+	}			
+
+	.userMsg .content{
+		float:left;		
+		margin-left:20px;
+		max-width:85%;
+		font-size:16px;
+		line-height:40px;
+	}
+
+	.userMsg .userName{
+		color:rgb(21,21,21);
+		font-size:14px;
+		display:none;
+		
+	}
+	
+	.userMsg .userChat{
+		color:rgb(21,21,21);
+		background:rgb(245,245,245);
+		padding-left:10px;
+		padding-right:10px;
+	}
+	
+	.userMsg .userChat img{
+		width:50%;
+		margin:10px 0px
+	}
+
+	.userMsg .userChat video{
+		width:50%;
+	}
+
+
+
+	.userMsg .chatTime{
+		color:rgb(188,188,188);
+		font-size:12px;
+		width: 100%;
+		float: left;
+		margin-left: 60px;
+		line-height:30px;
+	}
+
+
+
+.customerServiceMsg{
+	float:right;
+	text-align:left;
+	width:80%;
+	min-height:20px;
+	margin-right:20px;
+}
+
+	.customerServiceMsg .userHead{
+		float:right;
+		height:40px;
+		width:40px;
+	}	
+
+	.customerServiceMsg  .userHead img{
+		width:100%;
+		height:100%;
+		
+	}			
+
+	.customerServiceMsg .content{
+		float:right;		
+		margin-right:10px;
+		max-width:85%;
+		font-size:16px;
+		line-height:40px;
+	}
+
+	.customerServiceMsg .userName{
+		color:rgb(21,21,21);
+		text-align:right;
+		font-size:14px;
+		display:none;
+		
+	}
+	
+	.customerServiceMsg .userChat{
+		color:rgb(21,21,21);
+		text-align:right;
+		padding-right:10px;
+		padding-left:10px;
+		background:rgb(158,234,106)
+	}
+	
+	.customerServiceMsg .userChatImg{
+		width:50%;
+		float:right;
+		min-width: 40px;
+	}
+
+
+	.customerServiceMsg .userChat img{
+		width:100%;
+		margin:10px 0px;
+	}
+
+	.customerServiceMsg .userChat video{
+		width:50%;
+	}
+
+	
+	.customerServiceMsg .chatTime{
+		color:rgb(188,188,188);
+		text-align:right;
+		font-size:12px;
+		float: right;
+		margin-right: 50px;
+		line-height: 30px;
+		width:100%;
+	}
+
+
+.ChatBox{
+	height:28%;
+	width:100%;
+	overflow:hidden;
+	background:rgb(243,243,243)
+}
+
+.ChatBox .toolbar{
+	height:40px;
+	width:100%;
+	
+}
+
+.ChatBox .toolbar img{
+	vertical-align:middle;
+	margin-top:10px;
+	margin-left:10px;
+}
+
+.ChatBox .sendTextarea{
+	width:95%;
+	height:calc(100% - 50px);
+	margin:0px auto;
+	position:relative;
+
+}
+
+
+.chatValueBox{
+	width:100%;
+	height:100%;
+	background:rgb(242,242,242);
+}
+
+
+
+.sendMsg{
+	width:100px;
+	height:30px;
+	position:absolute;
+	right:10px;
+	bottom:10px;
+	color:#fff;
+	background:rgb(74,74,74);
+	cursor:pointer;
+}
+
+
+
+.right-box{
+	height:100%;
+}
+
+.customer-wrap{
+	height:calc(100% - 235px);
+}
+
+.middle-wrap{
+	height: calc(100% - 75px);
+}
+
+.middle-left{
+	height:100%;
+
+}
+
+#map-wrap{
+	height:calc(100% - 40px);
+}
+
+#view_Shadow {
+	background: rgba(0, 0, 0, 0.8) url(../img/loading.gif) no-repeat
+		center;
+	background-size: 50px 50px;
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	z-index: 99999;
+}
